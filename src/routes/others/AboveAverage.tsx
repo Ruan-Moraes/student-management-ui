@@ -45,6 +45,7 @@ const AboveAverage = () => {
     <Main>
       <div>
         <MainTitle title="Alunos acima da média da turma" />
+
         <div>
           <p className="text-sm">
             Média da turma:{' '}
@@ -67,7 +68,7 @@ const AboveAverage = () => {
                       {student.nome}
                     </td>
                     <td className="px-4 py-2 border border-gray-300">
-                      {student.media}
+                      {student.media?.toFixed(2)}
                     </td>
                   </tr>
                 ))}

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import Main from '../../components/templates/Main';
 import MainTitle from '../../titles/MainTitle';
 import BaseInput from '../../components/inputs/BaseInput';
@@ -47,8 +49,20 @@ const RegisterDiscipline = () => {
             placeholder="Digite o nome da disciplina"
             type="text"
           />
-          <SubmitInput text="Cadastrar aluno" handleClick={handleCadastro} />
+          <SubmitInput
+            text="Cadastrar disciplina"
+            handleClick={handleCadastro}
+          />
         </form>
+      </div>
+      <div>
+        <p className="text-sm mt-2 px-4">
+          Não se esqueça matricular os alunos na disciplina cadastrada. Para
+          isso, acesse a página de gerenciamento de alunos{' '}
+          <Link to={'/alunos/gerenciar/'}>
+            <span className="text-blue-500">clicando aqui</span>
+          </Link>
+        </p>
       </div>
     </Main>
   );

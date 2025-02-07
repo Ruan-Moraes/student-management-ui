@@ -255,7 +255,7 @@ const ManageStudents = () => {
               <div key={id} className="flex justify-between items-center">
                 <p>{nome}</p>
                 <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
                   onClick={() =>
                     selectedStudent && handleRegister(id, selectedStudent.id)
                   }
@@ -266,7 +266,7 @@ const ManageStudents = () => {
             ))}
           </div>
           <button
-            className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
             onClick={() => setIsModalOpen(false)}
           >
             Fechar
