@@ -1,4 +1,4 @@
-import ButtonsContainer from '../../routes/containers/ButtonsContainer';
+import ButtonsContainer from '../containers/ButtonsContainer';
 import Button from '../../components/buttons/Button';
 import StudentInfo from '../informations/StudentInfo';
 

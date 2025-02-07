@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
+import axiosInstance from '../../helper/axios-instance';
+
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
+import CardsContainer from '../../components/containers/CardsContainer';
+import GradesCard from '../../components/card/GradesCard';
+import Button from '../../components/buttons/Button';
 
 const ManageGrades = () => {
   const [students, setStudents] = useState<
@@ -21,42 +26,42 @@ const ManageGrades = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAverageModalOpen, setIsAverageModalOpen] = useState(false);
+
   const [selectedStudent, setSelectedStudent] = useState<{
     id: number;
     nome: string;
   } | null>(null);
 
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/alunos/listar');
-        const data = await response.json();
+        const [studentsResponse, gradesResponse] = await Promise.all([
+          axiosInstance.get('/alunos/listar'),
+          axiosInstance.get('/notas/alunos'),
+        ]);
 
-        setStudents(data);
+        setStudents(studentsResponse.data);
+        setGrades(gradesResponse.data);
       } catch (error) {
-        console.error('Erro ao buscar alunos:', error);
+        alert('Erro ao buscar dados!');
+
+        console.error('Erro ao buscar dados:', error);
       }
     };
 
-    fetchStudents();
+    fetchData();
   }, []);
 
   const handleGrades = async (id: number, nome: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/notas/alunos/${id}`);
+      const response = await axiosInstance.get(`/notas/alunos/${id}`);
 
-      if (!response.ok) {
-        alert('Erro ao buscar notas do aluno!');
-
-        return;
-      }
-
-      const data = await response.json();
-
-      setGrades(data);
+      setGrades(response.data);
       setSelectedStudent({ id, nome });
       setIsModalOpen(true);
     } catch (error) {
+      alert('Erro ao buscar notas do aluno!');
+
       console.error('Erro ao buscar notas do aluno:', error);
     }
   };
@@ -68,58 +73,32 @@ const ManageGrades = () => {
     value: number
   ) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/notas/atualizar/${StudentId}/${disciplinaId}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            aluno: students.find((student) => student.id === StudentId)?.nome,
-            disciplina: grades.find((grade) => grade.id === disciplinaId)
-              ?.disciplina,
-            valorNota: Number(value),
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        alert('Erro ao atualizar nota!');
-
-        return;
-      }
+      await axiosInstance.put(`/notas/atualizar/${StudentId}/${disciplinaId}`, {
+        aluno: students.find((student) => student.id === StudentId)?.nome,
+        disciplina: grades.find((grade) => grade.id === disciplinaId)
+          ?.disciplina,
+        valorNota: Number(value),
+      });
 
       setGrades((prev) =>
-        prev.map((grade) => {
-          if (grade.id === id) {
-            return { ...grade, valorNota: value };
-          }
-
-          return grade;
-        })
+        prev.map((grade) =>
+          grade.id === id ? { ...grade, valorNota: value } : grade
+        )
       );
 
       alert('Nota atualizada com sucesso!');
     } catch (error) {
+      alert('Erro ao atualizar nota!');
+
       console.error('Erro ao atualizar nota:', error);
     }
   };
 
   const handleGradeAverage = async (id: number, nome: string) => {
     try {
-      const response = await await fetch(
-        `http://localhost:8080/notas/media/${id}`
-      );
+      const response = await axiosInstance.get(`/notas/media/${id}`);
 
-      if (!response.ok) {
-        alert('Erro ao buscar média geral do aluno!');
-        return;
-      }
-
-      const data = await response.json();
-
-      setAverage(data);
+      setAverage(response.data);
       setSelectedStudent({ id, nome });
       setIsAverageModalOpen(true);
     } catch (error) {
@@ -130,44 +109,24 @@ const ManageGrades = () => {
   return (
     <Main>
       <MainTitle title="Gestão de Notas" />
-      <div className="grid gap-4">
+      <CardsContainer>
         {students.map(({ id, nome, percentualFrequencia }) => (
-          <div
+          <GradesCard
             key={id}
-            className="flex items-center justify-between bg-white shadow-sm p-4 rounded-lg border border-gray-200"
-          >
-            <div className="flex flex-col gap-2 justify-between h-full">
-              <div className="mt-8">
-                <p className="text-lg text-gray-800 font-bold">{nome}</p>
-                <p className="text-sm text-gray-500">
-                  Frequência: {percentualFrequencia}%
-                </p>
-              </div>
-              <p className="text-xs text-gray-500">ID: {id}</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
-                onClick={() => handleGrades(id, nome)}
-              >
-                Editar Notas
-              </button>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
-                onClick={() => handleGradeAverage(id, nome)}
-              >
-                Média Geral
-              </button>
-            </div>
-          </div>
+            id={id}
+            nome={nome}
+            percentualFrequencia={percentualFrequencia}
+            handleGrades={handleGrades}
+            handleGradeAverage={handleGradeAverage}
+          />
         ))}
-      </div>
+      </CardsContainer>
 
       {isModalOpen && selectedStudent && (
         <Dialog
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center"
+          className="fixed inset-0 z-50 flex items-center justify-center mx-4"
         >
           <div
             className="fixed inset-0 bg-black opacity-50"
@@ -185,10 +144,9 @@ const ManageGrades = () => {
                     <p className="bg-gray-200 text-gray-800 font-semibold py-1 px-4 rounded">
                       {valorNota}
                     </p>
-                    <button
-                      type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded cursor-pointer"
-                      onClick={() => {
+                    <Button
+                      className="bg-blue-500 hover:bg-blue-700"
+                      handleClick={() => {
                         const value = prompt(
                           `Digite a nova nota para a disciplina ${disciplina}`
                         );
@@ -212,19 +170,17 @@ const ManageGrades = () => {
                           );
                         }
                       }}
-                    >
-                      Editar
-                    </button>
+                      label="Editar"
+                    />
                   </div>
                 </div>
               ))}
             </div>
-            <button
-              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Fechar
-            </button>
+            <Button
+              className="mt-4 bg-red-500 hover:bg-red-700"
+              handleClick={() => setIsModalOpen(false)}
+              label="Fechar"
+            />
           </DialogPanel>
         </Dialog>
       )}
@@ -232,7 +188,7 @@ const ManageGrades = () => {
         <Dialog
           open={isAverageModalOpen}
           onClose={() => setIsAverageModalOpen(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center"
+          className="fixed inset-0 z-50 flex items-center justify-center mx-4"
         >
           <div
             className="fixed inset-0 bg-black opacity-50"
@@ -247,12 +203,11 @@ const ManageGrades = () => {
                 {typeof average === 'number' ? average.toFixed(2) : 'N/A'}
               </p>
             </div>
-            <button
-              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
-              onClick={() => setIsAverageModalOpen(false)}
-            >
-              Fechar
-            </button>
+            <Button
+              className="mt-4 bg-red-500 hover:bg-red-700"
+              handleClick={() => setIsAverageModalOpen(false)}
+              label="Fechar"
+            />
           </DialogPanel>
         </Dialog>
       )}

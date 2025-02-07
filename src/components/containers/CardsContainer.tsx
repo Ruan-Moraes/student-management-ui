@@ -1,12 +1,9 @@
-type DisciplineCardContainerProps = {
+type CardsContainerProps = {
   className?: string;
   children: React.ReactNode;
 };
 
-const DisciplineCardContainer = ({
-  className,
-  children,
-}: DisciplineCardContainerProps) => {
+const CardsContainer = ({ className, children }: CardsContainerProps) => {
   return (
     <div
       className={
@@ -20,4 +17,4 @@ const DisciplineCardContainer = ({
   );
 };
 
-export default DisciplineCardContainer;
+export default CardsContainer;

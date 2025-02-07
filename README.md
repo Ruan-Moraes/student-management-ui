@@ -26,6 +26,7 @@ Este sistema ajuda o professor Carlos a organizar notas e frequência dos alunos
 - React
 - TypeScript
 - TailwindCSS
+- Axios
 
 ## Requisitos
 

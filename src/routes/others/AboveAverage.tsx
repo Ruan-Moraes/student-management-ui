@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import axiosInstance from '../../helper/axios-instance';
+
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 
@@ -10,35 +12,23 @@ const AboveAverage = () => {
   const [average, setAverage] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchAverage = async () => {
+    const fetchDate = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8080/notas/media-todos-alunos'
-        );
+        const [averageResponse, studentsResponse] = await Promise.all([
+          axiosInstance.get('/notas/media-todos-alunos'),
+          axiosInstance.get('/notas/alunos-acima-media-turma'),
+        ]);
 
-        const data = await response.json();
-
-        setAverage(data);
+        setAverage(averageResponse.data);
+        setStudents(studentsResponse.data);
       } catch (error) {
-        console.error('Erro ao buscar média da turma:', error);
+        alert('Erro ao buscar dados');
+
+        console.error('Erro ao buscar dados:', error);
       }
     };
 
-    const fetchStudentsAboveAverage = async () => {
-      try {
-        const response = await fetch(
-          'http://localhost:8080/notas/alunos-acima-media-turma'
-        );
-        const data = await response.json();
-
-        setStudents(data);
-      } catch (error) {
-        console.error('Erro ao buscar alunos acima da média:', error);
-      }
-    };
-
-    fetchAverage();
-    fetchStudentsAboveAverage();
+    fetchDate();
   }, []);
 
   return (

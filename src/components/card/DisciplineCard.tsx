@@ -1,5 +1,5 @@
 import DisciplineInfo from '../informations/DisciplineInfo';
-import ButtonsContainer from '../../routes/containers/ButtonsContainer';
+import ButtonsContainer from '../containers/ButtonsContainer';
 import Button from '../../components/buttons/Button';
 
 type DisciplineCardProps = {

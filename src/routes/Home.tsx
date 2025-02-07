@@ -1,7 +1,7 @@
 import Main from '../components/templates/Main';
 
 import MainTitle from '../components/titles/MainTitle';
-import ButtonsContainer from './containers/ButtonsContainer';
+import ButtonsContainer from '../components/containers/ButtonsContainer';
 import Button from '../components/buttons/LinkButton';
 
 const Home = () => {

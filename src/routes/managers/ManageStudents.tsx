@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { Link } from 'react-router-dom';
 
 import axiosInstance from '../../helper/axios-instance';
 
 import Main from '../../components/templates/Main';
 
 import MainTitle from '../../components/titles/MainTitle';
-import StudentCardContainer from '../containers/StudentCardContainer';
+import CardsContainer from '../../components/containers/CardsContainer';
 import StudentCard from '../../components/card/StudentCard';
 import Button from '../../components/buttons/Button';
 
@@ -151,7 +152,7 @@ const ManageStudents = () => {
   return (
     <Main>
       <MainTitle title="Gestão de Alunos" />
-      <StudentCardContainer>
+      <CardsContainer>
         {students.map(({ id, nome, percentualFrequencia }) => (
           <StudentCard
             key={id}
@@ -164,11 +165,20 @@ const ManageStudents = () => {
             handleDelete={handleDelete}
           />
         ))}
-      </StudentCardContainer>
+      </CardsContainer>
+      <div>
+        <p className="text-xs">
+          Não se esqueça de colocar as notas dos alunos, você pode fazer isso
+          clicando
+          <Link to="/notas/gerenciar" className="text-blue-500">
+            <span className="text-blue-500"> aqui</span>
+          </Link>
+        </p>
+      </div>
       <Dialog
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        className="fixed inset-0 z-50 flex items-center justify-center"
+        className="fixed inset-0 z-50 flex items-center justify-center mx-4"
       >
         <div
           className="fixed inset-0 bg-black opacity-50 z-10"
