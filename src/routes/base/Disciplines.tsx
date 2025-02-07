@@ -1,4 +1,4 @@
-import MainTitle from '../../titles/MainTitle';
+import MainTitle from '../../components/titles/MainTitle';
 import Main from '../../components/templates/Main';
 import Button from '../../components/buttons/LinkButton';
 

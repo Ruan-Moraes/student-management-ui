@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import BaseInput from '../../components/inputs/BaseInput';
-import MainTitle from '../../titles/MainTitle';
+import MainTitle from '../../components/titles/MainTitle';
 
 const Login = () => {
   // Todo: Implementar o formulário de registro de usuário do lado da API

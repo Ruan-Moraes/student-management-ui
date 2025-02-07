@@ -1,50 +1,62 @@
-# React + TypeScript + Vite
+# Sistema de Gerenciamento de Estudantes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Screenshot](public/Screenshot.PNG)
 
-Currently, two official plugins are available:
+## Descrição
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este sistema ajuda o professor Carlos a organizar notas e frequência dos alunos. Com ele, é possível:
 
-## Expanding the ESLint configuration
+- Cadastrar, editar e excluir estudantes e disciplinas.
+- Inserir notas (0 a 10) para cinco disciplinas por aluno.
+- Registrar a frequência em percentual (0 a 100%).
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+**Calcular automaticamente:**
 
-- Configure the top-level `parserOptions` property like this:
+- Média das notas por aluno e por disciplina.
+- Média geral da turma.
+- Frequência geral de cada aluno.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+**Identificar:**
+
+- Alunos com desempenho acima da média da turma.
+- Alunos com frequência abaixo de 75%, que precisam de atenção especial.
+
+## Tecnologias
+
+- React
+- TypeScript
+- TailwindCSS
+
+## Requisitos
+
+- Node.js
+
+## Como rodar o projeto
+
+1. Clone o repositório
+
+```bash
+git clone
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Instale as dependências
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+3. Rode o projeto
+
+```bash
+npm run dev
+```
+
+4. Acesse o projeto em [http://localhost:5173/](http://localhost:5173/)
+
+## Projeto Backend
+
+O backend do projeto está disponível em [student_management_api](https://github.com/Ruan-Moraes/student_management_api)
+
+## Observações
+
+Não foquei muito no design e nem muito na qualidade do código, pois o foco era a lógica do sistema.

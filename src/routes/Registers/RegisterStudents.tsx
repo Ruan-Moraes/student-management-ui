@@ -1,5 +1,5 @@
 import Main from '../../components/templates/Main';
-import MainTitle from '../../titles/MainTitle';
+import MainTitle from '../../components/titles/MainTitle';
 import BaseInput from '../../components/inputs/BaseInput';
 import SubmitInput from '../../components/inputs/SubmitInput';
 
