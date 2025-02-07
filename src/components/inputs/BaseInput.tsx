@@ -12,7 +12,7 @@ const BaseInput = ({ label, placeholder, type }: BaseInputProps) => {
         <input
           type={type}
           placeholder={placeholder}
-          className="border border-gray-400 p-2 rounded-lg mb-2 outline-blue-400 focus:border-blue-400"
+          className="border border-gray-400 p-2 rounded-sm mb-2 outline-blue-400 focus:border-blue-400"
         />
       </label>
     </div>
