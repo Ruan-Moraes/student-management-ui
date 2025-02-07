@@ -4,7 +4,7 @@ import axiosInstance from '../../helper/axios-instance';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
-import DisciplineCardContainer from '../containers/DisciplineCardContainer';
+import CardsContainer from '../containers/CardsContainer';
 import DisciplineCard from '../../components/card/DisciplineCard';
 
 interface Disciplina {
@@ -86,7 +86,7 @@ const ManageStudents = () => {
   return (
     <Main>
       <MainTitle title="Gestão de Disciplinas" />
-      <DisciplineCardContainer>
+      <CardsContainer>
         {disciplinas.map(({ id, nome }) => (
           <DisciplineCard
             key={id}
@@ -96,7 +96,7 @@ const ManageStudents = () => {
             handleDelete={handleDelete}
           />
         ))}
-      </DisciplineCardContainer>
+      </CardsContainer>
     </Main>
   );
 };

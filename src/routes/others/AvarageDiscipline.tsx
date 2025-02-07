@@ -1,27 +1,30 @@
 import { useEffect, useState } from 'react';
+
+import axiosInstance from '../../helper/axios-instance';
+
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 
-interface DisciplineAverage {
-  id: number;
-  nome: string;
-  media: number;
-}
-
 const AvarageDiscipline = () => {
-  const [listAveragse, setListAverages] = useState<DisciplineAverage[]>([]);
+  const [listAveragse, setListAverages] = useState<
+    {
+      id: number;
+      nome: string;
+      media: number;
+    }[]
+  >([]);
 
   useEffect(() => {
     const fetchAveragePerDiscipline = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8080/notas/media-todos-alunos-disciplina/'
+        const response = await axiosInstance.get(
+          '/notas/media-todos-alunos-disciplina/'
         );
 
-        const data: DisciplineAverage[] = await response.json();
-
-        setListAverages(data);
+        setListAverages(response.data);
       } catch (error) {
+        alert('Erro ao buscar média da turma');
+
         console.error('Erro ao buscar média da turma:', error);
       }
     };

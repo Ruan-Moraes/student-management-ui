@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 
+import axiosInstance from '../../helper/axios-instance';
+
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 
@@ -19,13 +21,14 @@ const Frequency = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/alunos/buscar/frequencia/${cutoffValue}`
+      const response = await axiosInstance.get(
+        `/alunos/buscar/frequencia/${cutoffValue}`
       );
-      const data = await response.json();
 
-      setFrequencies(data);
+      setFrequencies(response.data);
     } catch (error) {
+      alert('Erro ao buscar frequências');
+
       console.error('Erro ao buscar frequências:', error);
     }
   };
