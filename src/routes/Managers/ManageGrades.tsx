@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 import Main from '../../components/templates/Main';
-import MainTitle from '../../titles/MainTitle';
+import MainTitle from '../../components/titles/MainTitle';
 
 const ManageGrades = () => {
   const [students, setStudents] = useState<

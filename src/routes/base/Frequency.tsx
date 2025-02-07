@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 
 import Main from '../../components/templates/Main';
-import MainTitle from '../../titles/MainTitle';
+import MainTitle from '../../components/titles/MainTitle';
 
 interface Frequency {
   id: number;

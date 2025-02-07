@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Main from '../../components/templates/Main';
-import MainTitle from '../../titles/MainTitle';
+import MainTitle from '../../components/titles/MainTitle';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 interface Student {

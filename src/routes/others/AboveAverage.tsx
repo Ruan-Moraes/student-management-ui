@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Main from '../../components/templates/Main';
-import MainTitle from '../../titles/MainTitle';
+import MainTitle from '../../components/titles/MainTitle';
 
 const AboveAverage = () => {
   const [students, setStudents] = useState<{ nome: string; media: number }[]>(
@@ -45,7 +45,6 @@ const AboveAverage = () => {
     <Main>
       <div>
         <MainTitle title="Alunos acima da média da turma" />
-
         <div>
           <p className="text-sm">
             Média da turma:{' '}
