@@ -1,4 +1,4 @@
-import ContainerButtons from '../../routes/containers/ContainerButtons';
+import ButtonsContainer from '../../routes/containers/ButtonsContainer';
 import Button from '../../components/buttons/Button';
 import StudentInfo from '../informations/StudentInfo';
 
@@ -29,7 +29,7 @@ const StudentCard = ({
         nome={nome}
         percentualFrequencia={percentualFrequencia}
       />
-      <ContainerButtons className="flex flex-col gap-2">
+      <ButtonsContainer className="flex flex-col gap-2">
         <Button
           className="bg-green-400 hover:bg-green-500"
           handleClick={() => openModal(id)}
@@ -50,7 +50,7 @@ const StudentCard = ({
           handleClick={() => handleDelete(id)}
           label="Deletar"
         />
-      </ContainerButtons>
+      </ButtonsContainer>
     </div>
   );
 };

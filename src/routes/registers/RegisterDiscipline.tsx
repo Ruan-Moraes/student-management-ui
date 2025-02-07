@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom';
 
+import axiosInstance from '../../helper/axios-instance';
+
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 import BaseInput from '../../components/inputs/BaseInput';
 import SubmitInput from '../../components/inputs/SubmitInput';
+import FormContainer from '../../components/form/FormContainer';
 
 const RegisterDiscipline = () => {
-  const handleCadastro = async (e: React.MouseEvent<HTMLInputElement>) => {
+  const handleRegister = async (e: React.MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const nome = (
@@ -14,27 +17,14 @@ const RegisterDiscipline = () => {
     ).value;
 
     try {
-      const response = await fetch(
-        'http://localhost:8080/disciplinas/cadastrar',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            nome,
-          }),
-        }
-      );
+      await axiosInstance.post('/disciplinas/cadastrar', {
+        nome,
+      });
 
-      if (response.ok) {
-        alert('Disciplina cadastrada com sucesso!');
-      }
-
-      if (!response.ok) {
-        alert('Erro ao cadastrar disciplina!');
-      }
+      alert('Disciplina cadastrada com sucesso!');
     } catch (error) {
+      alert('Erro ao cadastrar disciplina');
+
       console.error('Erro ao cadastrar disciplina:', error);
     }
   };
@@ -42,19 +32,14 @@ const RegisterDiscipline = () => {
   return (
     <Main>
       <MainTitle title="Cadastrar Disciplina" />
-      <div className="bg-blue-100 p-4 rounded-lg">
-        <form className="flex-col flex">
-          <BaseInput
-            label="Nome da disciplina"
-            placeholder="Digite o nome da disciplina"
-            type="text"
-          />
-          <SubmitInput
-            text="Cadastrar disciplina"
-            handleClick={handleCadastro}
-          />
-        </form>
-      </div>
+      <FormContainer>
+        <BaseInput
+          label="Nome da disciplina"
+          placeholder="Digite o nome da disciplina"
+          type="text"
+        />
+        <SubmitInput text="Cadastrar disciplina" handleClick={handleRegister} />
+      </FormContainer>
       <div>
         <p className="text-sm mt-2 px-4">
           Não se esqueça matricular os alunos na disciplina cadastrada. Para

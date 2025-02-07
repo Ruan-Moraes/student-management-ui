@@ -6,12 +6,12 @@ import Home from './routes/Home';
 import Disciplines from './routes/base/Disciplines';
 import Students from './routes/base/Students';
 import Grades from './routes/base/Grades';
-import ManageStudents from './routes/Managers/ManageStudents';
-import RegisterStudents from './routes/Registers/RegisterStudents';
-import RegisterDiscipline from './routes/Registers/RegisterDiscipline';
-import ManageDiscipline from './routes/Managers/ManageDiscipline';
+import ManageStudents from './routes/managers/ManageStudents';
+import RegisterStudents from './routes/registers/RegisterStudents';
+import RegisterDiscipline from './routes/registers/RegisterDiscipline';
+import ManageDiscipline from './routes/managers/ManageDiscipline';
 import Frequency from './routes/base/Frequency';
-import ManageGrades from './routes/Managers/ManageGrades';
+import ManageGrades from './routes/managers/ManageGrades';
 import AboveAverage from './routes/others/AboveAverage';
 import AvarageDiscipline from './routes/others/AvarageDiscipline';
 

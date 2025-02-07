@@ -1,7 +1,7 @@
 import Main from '../components/templates/Main';
 
 import MainTitle from '../components/titles/MainTitle';
-import ContainerButtons from './containers/ContainerButtons';
+import ButtonsContainer from './containers/ButtonsContainer';
 import Button from '../components/buttons/LinkButton';
 
 const Home = () => {
@@ -9,12 +9,12 @@ const Home = () => {
     <>
       <Main>
         <MainTitle title="Bem-vindo ao sistema de gestão de alunos" />
-        <ContainerButtons>
+        <ButtonsContainer>
           <Button text="Alunos" link="alunos" />
           <Button text="Disciplinas" link="disciplinas" />
           <Button text="Notas" link="notas" />
           <Button text="Frequências" link="frequencias" />
-        </ContainerButtons>
+        </ButtonsContainer>
       </Main>
     </>
   );

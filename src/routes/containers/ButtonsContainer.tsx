@@ -1,9 +1,9 @@
-type ContainerButtonsProps = {
+type ButtonsContainerProps = {
   className?: string;
   children: React.ReactNode;
 };
 
-const ContainerButtons = ({ className, children }: ContainerButtonsProps) => {
+const ButtonsContainer = ({ className, children }: ButtonsContainerProps) => {
   return (
     <div className={className ? className : 'grid grid-cols-2 gap-2'}>
       {children}
@@ -11,4 +11,4 @@ const ContainerButtons = ({ className, children }: ContainerButtonsProps) => {
   );
 };
 
-export default ContainerButtons;
+export default ButtonsContainer;
