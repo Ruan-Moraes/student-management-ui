@@ -97,22 +97,25 @@ const ManageStudents = () => {
     <Main>
       <MainTitle title="Gestão de Disciplinas" />
       <div className="grid gap-4">
-        {disciplinas.map((disciplina) => (
+        {disciplinas.map(({ id, nome }) => (
           <div
-            key={disciplina.id}
+            key={id}
             className="bg-blue-100 p-4 rounded-lg flex justify-between items-center"
           >
-            <h2 className="font-bold">{disciplina.nome}</h2>
+            <div className="flex flex-col">
+              <h2 className="font-bold">{nome}</h2>
+              <p className="text-xs text-gray-500">ID: {id}</p>
+            </div>
             <div className="flex gap-2">
               <button
-                onClick={() => handleName(disciplina.id)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded"
+                onClick={() => handleName(id)}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded cursor-pointer"
               >
                 Editar nome
               </button>
               <button
-                onClick={() => handleDelete(disciplina.id)}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded"
+                onClick={() => handleDelete(id)}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded cursor-pointer"
               >
                 Deletar
               </button>

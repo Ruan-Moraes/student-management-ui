@@ -210,25 +210,25 @@ const ManageStudents = () => {
             </div>
             <div className="flex flex-col gap-2">
               <button
-                className="px-3 py-1 bg-green-400 text-white rounded-lg hover:bg-green-500 text-sm"
+                className="px-3 py-1 bg-green-400 text-white rounded-lg hover:bg-green-500 text-sm cursor-pointer"
                 onClick={() => openModal(id)}
               >
                 Matricular
               </button>
               <button
-                className="px-3 py-1 bg-indigo-400 text-white rounded-lg hover:bg-indigo-500 text-sm"
+                className="px-3 py-1 bg-indigo-400 text-white rounded-lg hover:bg-indigo-500 text-sm cursor-pointer"
                 onClick={() => handleFrequency(id)}
               >
                 Alterar Frequência
               </button>
               <button
-                className="px-3 py-1 bg-yellow-400 text-white rounded-lg hover:bg-yellow-500 text-sm"
+                className="px-3 py-1 bg-yellow-400 text-white rounded-lg hover:bg-yellow-500 text-sm cursor-pointer"
                 onClick={() => handleName(id)}
               >
                 Alterar Nome
               </button>
               <button
-                className="px-3 py-1 bg-red-400 text-white rounded-lg hover:bg-red-500 text-sm"
+                className="px-3 py-1 bg-red-400 text-white rounded-lg hover:bg-red-500 text-sm cursor-pointer"
                 onClick={() => handleDelete(id)}
               >
                 Deletar

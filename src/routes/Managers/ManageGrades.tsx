@@ -43,7 +43,7 @@ const ManageGrades = () => {
 
   const handleGrades = async (id: number, nome: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/notas/aluno/${id}`);
+      const response = await fetch(`http://localhost:8080/notas/alunos/${id}`);
 
       if (!response.ok) {
         alert('Erro ao buscar notas do aluno!');
@@ -109,7 +109,7 @@ const ManageGrades = () => {
   const handleGradeAverage = async (id: number, nome: string) => {
     try {
       const response = await await fetch(
-        `http://localhost:8080/notas/aluno/${id}`
+        `http://localhost:8080/notas/media/${id}`
       );
 
       if (!response.ok) {
@@ -119,19 +119,7 @@ const ManageGrades = () => {
 
       const data = await response.json();
 
-      const sum = data.reduce(
-        (
-          acc: number,
-          curr: {
-            valorNota: number;
-          }
-        ) => {
-          return acc + curr.valorNota;
-        },
-        0
-      );
-
-      setAverage(sum / data.length);
+      setAverage(data);
       setSelectedStudent({ id, nome });
       setIsAverageModalOpen(true);
     } catch (error) {
@@ -159,13 +147,13 @@ const ManageGrades = () => {
             </div>
             <div className="flex flex-col gap-2">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
                 onClick={() => handleGrades(id, nome)}
               >
                 Editar Notas
               </button>
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
                 onClick={() => handleGradeAverage(id, nome)}
               >
                 Média Geral
@@ -199,7 +187,7 @@ const ManageGrades = () => {
                     </p>
                     <button
                       type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded cursor-pointer"
                       onClick={() => {
                         const value = prompt(
                           `Digite a nova nota para a disciplina ${disciplina}`
@@ -232,7 +220,7 @@ const ManageGrades = () => {
               ))}
             </div>
             <button
-              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               onClick={() => setIsModalOpen(false)}
             >
               Fechar
@@ -256,11 +244,11 @@ const ManageGrades = () => {
             </DialogTitle>
             <div className="flex justify-center">
               <p className="text-3xl font-bold text-blue-600 bg-blue-50 py-2 px-8 rounded-sm">
-                {average?.toFixed(2)}
+                {typeof average === 'number' ? average.toFixed(2) : 'N/A'}
               </p>
             </div>
             <button
-              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               onClick={() => setIsAverageModalOpen(false)}
             >
               Fechar
