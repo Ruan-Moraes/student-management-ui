@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { Link } from 'react-router-dom';
 
+import axios from 'axios';
 import axiosInstance from '../../helper/axios-instance';
 
 import Main from '../../components/templates/Main';
@@ -13,18 +14,18 @@ import Button from '../../components/buttons/Button';
 
 type Student = {
   id: number;
-  nome: string;
-  percentualFrequencia: number;
+  name: string;
+  frequency: number;
 };
 
 type Disciplina = {
   id: number;
-  nome: string;
+  name: string;
 };
 
 const ManageStudents = () => {
   const [students, setStudents] = useState<Student[]>([]);
-  const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
+  const [disciplines, setDisciplines] = useState<Disciplina[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,35 +41,47 @@ const ManageStudents = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [studentsResponse, disciplinasResponse] = await Promise.all([
-          axiosInstance.get('/alunos/listar'),
-          axiosInstance.get('/disciplinas/listar'),
+        const [studentsResponse, disciplinesResponse] = await Promise.all([
+          axiosInstance.get('/students'),
+          axiosInstance.get('/disciplines'),
         ]);
 
         setStudents(studentsResponse.data);
-        setDisciplinas(disciplinasResponse.data);
+        setDisciplines(disciplinesResponse.data);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
+
+        alert('Erro ao buscar dados');
       }
     };
 
     fetchData();
   }, []);
 
-  const handleRegister = async (disciplinaId: number, studentId: number) => {
+  const handleRegister = async (disciplineId: number, studentId: number) => {
     try {
-      await axiosInstance.post('/matriculas/criar', {
-        aluno: { id: studentId },
-        disciplina: { id: disciplinaId },
+      await axiosInstance.post('/enrollments', {
+        studentId: studentId,
+        disciplineId: disciplineId,
       });
 
       alert('Aluno matriculado com sucesso!');
     } catch (error) {
-      // Todo: Resolver retorno da API
+      console.error('Erro ao matricular aluno:', error);
 
-      alert('Erro ao matricular aluno');
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          alert('Aluno já matriculado nesta disciplina');
+        }
 
-      console.error('+ADSASDAD' + error);
+        if (error.response?.status === 404) {
+          alert('Aluno ou disciplina não encontrados');
+        }
+      }
+
+      if (!axios.isAxiosError(error)) {
+        alert('Erro ao matricular aluno');
+      }
     }
   };
 
@@ -82,52 +95,74 @@ const ManageStudents = () => {
     }
 
     try {
-      await axiosInstance.put(`/alunos/atualizar/${id}`, {
-        nome: students.find((student) => student.id === id)?.nome,
-        percentualFrequencia: Number(newFrequency),
+      await axiosInstance.put(`/students/${id}`, {
+        name: students.find((student) => student.id === id)?.name,
+        frequency: Number(newFrequency),
       });
 
       setStudents((prev) =>
         prev.map((student) =>
           student.id === id
-            ? { ...student, percentualFrequencia: Number(newFrequency) }
+            ? { ...student, frequency: Number(newFrequency) }
             : student
         )
       );
 
       alert('Frequência atualizada com sucesso!');
     } catch (error) {
-      alert('Erro ao atualizar frequência');
-
       console.error('Erro ao atualizar frequência:', error);
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          alert('Aluno não encontrado');
+        }
+      }
+
+      if (!axios.isAxiosError(error)) {
+        alert('Erro ao atualizar frequência');
+      }
     }
   };
 
   const handleName = async (id: number) => {
     const newNome = window.prompt('Digite o novo nome do aluno:');
 
-    if (!newNome) {
+    if (
+      !newNome ||
+      newNome.trim() === '' ||
+      newNome.length < 3 ||
+      newNome.length > 100
+    ) {
       alert('Nome inválido');
 
       return;
     }
 
     try {
-      await axiosInstance.put(`/alunos/atualizar/${id}`, {
-        nome: newNome,
-        percentualFrequencia: students.find((student) => student.id === id)
-          ?.percentualFrequencia,
+      await axiosInstance.put(`/students/${id}`, {
+        name: newNome,
+        frequency: students.find((student) => student.id === id)?.frequency,
       });
 
       setStudents((prev) =>
         prev.map((student) =>
-          student.id === id ? { ...student, nome: newNome } : student
+          student.id === id ? { ...student, name: newNome } : student
         )
       );
 
       alert('Nome atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar nome:', error);
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          alert('Aluno não encontrado');
+        }
+      }
+
+      if (!axios.isAxiosError(error)) {
+        alert('Erro ao atualizar nome');
+      }
     }
   };
 
@@ -139,13 +174,23 @@ const ManageStudents = () => {
     }
 
     try {
-      await axiosInstance.delete(`/alunos/deletar/${id}`);
+      await axiosInstance.delete(`/students/${id}`);
 
       setStudents((prev) => prev.filter((student) => student.id !== id));
 
       alert('Aluno deletado com sucesso!');
     } catch (error) {
       console.error('Erro ao deletar aluno:', error);
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          alert('Aluno não encontrado');
+        }
+      }
+
+      if (!axios.isAxiosError(error)) {
+        alert('Erro ao deletar aluno');
+      }
     }
   };
 
@@ -153,12 +198,12 @@ const ManageStudents = () => {
     <Main>
       <MainTitle title="Gestão de Alunos" />
       <CardsContainer>
-        {students.map(({ id, nome, percentualFrequencia }) => (
+        {students.map(({ id, name, frequency }) => (
           <StudentCard
             key={id}
             id={id}
-            nome={nome}
-            percentualFrequencia={percentualFrequencia}
+            name={name}
+            frequency={frequency}
             openModal={openModal}
             handleFrequency={handleFrequency}
             handleName={handleName}
@@ -186,10 +231,10 @@ const ManageStudents = () => {
         />
         <DialogPanel className="bg-white p-4 rounded-lg shadow-lg w-96 z-20 flex flex-col gap-4">
           <DialogTitle className="text-xl font-bold">
-            Matricular aluno(a): {selectedStudent?.nome}
+            Matricular aluno(a): {selectedStudent?.name}
           </DialogTitle>
           <div>
-            {disciplinas.map(({ id, nome }, index) => (
+            {disciplines.map(({ id, name }, index) => (
               <div
                 key={id}
                 className={`flex justify-between items-center py-2 ${
@@ -198,7 +243,7 @@ const ManageStudents = () => {
               >
                 <h3 className="flex flex-col">
                   <span>
-                    Disciplina: <span className="font-bold">{nome}</span>
+                    Disciplina: <span className="font-bold">{name}</span>
                   </span>
                   <span className="text-xs text-gray-500">Id: {id}</span>
                 </h3>
