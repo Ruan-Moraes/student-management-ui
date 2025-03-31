@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { Link } from 'react-router-dom';
 
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import axiosInstance from '../../helper/axios-instance';
+
+import { Discipline } from '../../types/DisciplineType';
+import { Student } from '../../types/StudentType';
 
 import Main from '../../components/templates/Main';
 
@@ -12,20 +15,9 @@ import CardsContainer from '../../components/containers/CardsContainer';
 import StudentCard from '../../components/card/StudentCard';
 import Button from '../../components/buttons/Button';
 
-type Student = {
-  id: number;
-  name: string;
-  frequency: number;
-};
-
-type Disciplina = {
-  id: number;
-  name: string;
-};
-
 const ManageStudents = () => {
   const [students, setStudents] = useState<Student[]>([]);
-  const [disciplines, setDisciplines] = useState<Disciplina[]>([]);
+  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,7 +33,10 @@ const ManageStudents = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [studentsResponse, disciplinesResponse] = await Promise.all([
+        const [studentsResponse, disciplinesResponse]: [
+          AxiosResponse<Student[]>,
+          AxiosResponse<Discipline[]>
+        ] = await Promise.all([
           axiosInstance.get('/students'),
           axiosInstance.get('/disciplines'),
         ]);

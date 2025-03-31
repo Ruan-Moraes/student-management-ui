@@ -1,12 +1,12 @@
 type DisciplineInfoProps = {
   id: number;
-  nome: string;
+  name: string;
 };
 
-const DisciplineInfo = ({ id, nome }: DisciplineInfoProps) => {
+const DisciplineInfo = ({ id, name }: DisciplineInfoProps) => {
   return (
     <div className="flex flex-col">
-      <h2 className="font-bold">{nome}</h2>
+      <h2 className="font-bold">{name}</h2>
       <p className="text-xs text-gray-500">ID: {id}</p>
     </div>
   );

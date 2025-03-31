@@ -4,7 +4,7 @@ import Button from '../../components/buttons/Button';
 
 type DisciplineCardProps = {
   id: number;
-  nome: string;
+  name: string;
 
   handleName: (id: number) => void;
   handleDelete: (id: number) => void;
@@ -12,7 +12,7 @@ type DisciplineCardProps = {
 
 const DisciplineCard = ({
   id,
-  nome,
+  name,
   handleName,
   handleDelete,
 }: DisciplineCardProps) => {
@@ -21,7 +21,7 @@ const DisciplineCard = ({
       key={id}
       className="bg-blue-100 p-4 rounded-lg flex justify-between items-center"
     >
-      <DisciplineInfo id={id} nome={nome} />
+      <DisciplineInfo id={id} name={name} />
       <ButtonsContainer>
         <Button
           className="bg-blue-500 hover:bg-blue-700"

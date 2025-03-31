@@ -6,30 +6,30 @@ import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 import BaseInput from '../../components/inputs/BaseInput';
 import SubmitInput from '../../components/inputs/SubmitInput';
-import FormContainer from '../../components/form/FormContainer';
+import FormContainer from '../../components/containers/FormContainer';
 
 const RegisterStudents = () => {
   const handleRegister = async (e: React.MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    const nome = (
+    const name = (
       document.querySelector('input[type="text"]') as HTMLInputElement
     ).value;
-    const percentualFrequencia = (
+    const frequency = (
       document.querySelector('input[type="number"]') as HTMLInputElement
     ).value;
 
     try {
-      await axiosInstance.post('/alunos/cadastrar', {
-        nome,
-        percentualFrequencia,
+      await axiosInstance.post('/students', {
+        name,
+        frequency,
       });
 
       alert('Aluno cadastrado com sucesso!');
     } catch (error) {
-      alert('Erro ao cadastrar aluno');
-
       console.error('Erro ao cadastrar aluno:', error);
+
+      alert('Erro ao cadastrar aluno');
     }
   };
 

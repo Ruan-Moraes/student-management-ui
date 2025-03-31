@@ -1,28 +1,25 @@
 import { useEffect, useState } from 'react';
 
+import axios, { AxiosResponse } from 'axios';
 import axiosInstance from '../../helper/axios-instance';
+
+import { Discipline } from '../../types/DisciplineType';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 import CardsContainer from '../../components/containers/CardsContainer';
 import DisciplineCard from '../../components/card/DisciplineCard';
 
-interface Disciplina {
-  id: number;
-  nome: string;
-}
-
 const ManageStudents = () => {
-  const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
+  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const disciplinesResponse = await axiosInstance.get(
-          '/disciplinas/listar'
-        );
+        const disciplinesResponse: AxiosResponse<Discipline[]> =
+          await axiosInstance.get('/disciplines');
 
-        setDisciplinas(disciplinesResponse.data);
+        setDisciplines(disciplinesResponse.data);
       } catch (error) {
         console.error('Erro ao buscar disciplinas:', error);
       }
@@ -34,28 +31,40 @@ const ManageStudents = () => {
   const handleName = async (id: number) => {
     const newNome = window.prompt('Digite o nome da disciplina');
 
-    if (!newNome) {
+    if (!newNome || newNome.trim() === '' || newNome.length < 2) {
       alert('Nome inválido');
 
       return;
     }
 
     try {
-      await axiosInstance.put(`/disciplinas/atualizar/${id}`, {
-        nome: newNome,
+      await axiosInstance.put(`/disciplines/${id}`, {
+        name: newNome,
       });
 
-      setDisciplinas((prev) =>
-        prev.map((disciplina) =>
-          disciplina.id === id ? { ...disciplina, nome: newNome } : disciplina
+      setDisciplines((prev) =>
+        prev.map((discipline) =>
+          discipline.id === id ? { ...discipline, name: newNome } : discipline
         )
       );
 
       alert('Nome atualizado com sucesso!');
     } catch (error) {
-      alert('Erro ao atualizar nome da disciplina');
-
       console.error('Erro ao atualizar nome:', error);
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          alert('Nome de disciplina já existe');
+        }
+
+        if (error.response?.status === 404) {
+          alert('Disciplina não encontrada');
+        }
+      }
+
+      if (!axios.isAxiosError(error)) {
+        alert('Erro ao atualizar nome da disciplina');
+      }
     }
   };
 
@@ -69,17 +78,25 @@ const ManageStudents = () => {
     }
 
     try {
-      await axiosInstance.delete(`/disciplinas/deletar/${id}`);
+      await axiosInstance.delete(`/disciplines/${id}`);
 
-      setDisciplinas((prev) =>
-        prev.filter((disciplina) => disciplina.id !== id)
+      setDisciplines((prev) =>
+        prev.filter((discipline) => discipline.id !== id)
       );
 
       alert('Disciplina deletada com sucesso!');
     } catch (error) {
-      alert('Erro ao deletar disciplina');
-
       console.error('Erro ao deletar aluno:', error);
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          alert('Disciplina não encontrada');
+        }
+      }
+
+      if (!axios.isAxiosError(error)) {
+        alert('Erro ao deletar disciplina');
+      }
     }
   };
 
@@ -87,11 +104,11 @@ const ManageStudents = () => {
     <Main>
       <MainTitle title="Gestão de Disciplinas" />
       <CardsContainer>
-        {disciplinas.map(({ id, nome }) => (
+        {disciplines.map(({ id, name }) => (
           <DisciplineCard
             key={id}
             id={id}
-            nome={nome}
+            name={name}
             handleName={handleName}
             handleDelete={handleDelete}
           />

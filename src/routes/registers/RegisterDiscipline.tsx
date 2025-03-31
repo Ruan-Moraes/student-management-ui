@@ -1,31 +1,46 @@
 import { Link } from 'react-router-dom';
 
+import axios from 'axios';
 import axiosInstance from '../../helper/axios-instance';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 import BaseInput from '../../components/inputs/BaseInput';
 import SubmitInput from '../../components/inputs/SubmitInput';
-import FormContainer from '../../components/form/FormContainer';
+import FormContainer from '../../components/containers/FormContainer';
 
 const RegisterDiscipline = () => {
   const handleRegister = async (e: React.MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    const nome = (
+    const name = (
       document.querySelector('input[type="text"]') as HTMLInputElement
     ).value;
 
+    if (!name || name.trim() === '' || name.length < 2) {
+      alert('Nome inválido');
+
+      return;
+    }
+
     try {
-      await axiosInstance.post('/disciplinas/cadastrar', {
-        nome,
+      await axiosInstance.post('/disciplines', {
+        name,
       });
 
       alert('Disciplina cadastrada com sucesso!');
     } catch (error) {
-      alert('Erro ao cadastrar disciplina');
-
       console.error('Erro ao cadastrar disciplina:', error);
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          alert('Nome de disciplina já existe');
+        }
+      }
+
+      if (!axios.isAxiosError(error)) {
+        alert('Erro ao cadastrar disciplina');
+      }
     }
   };
 
