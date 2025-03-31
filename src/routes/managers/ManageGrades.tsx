@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
+import { AxiosResponse } from 'axios';
 import axiosInstance from '../../helper/axios-instance';
+
+import { Student } from '../../types/StudentType';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
@@ -10,9 +13,7 @@ import GradesCard from '../../components/card/GradesCard';
 import Button from '../../components/buttons/Button';
 
 const ManageGrades = () => {
-  const [students, setStudents] = useState<
-    { id: number; nome: string; percentualFrequencia: number }[]
-  >([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [grades, setGrades] = useState<
     {
       id: number;
@@ -35,7 +36,10 @@ const ManageGrades = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [studentsResponse, gradesResponse] = await Promise.all([
+        const [studentsResponse, gradesResponse]: [
+          AxiosResponse<Student[]>,
+          AxiosResponse<any[]>
+        ] = await Promise.all([
           axiosInstance.get('/alunos/listar'),
           axiosInstance.get('/notas/alunos'),
         ]);
@@ -74,7 +78,7 @@ const ManageGrades = () => {
   ) => {
     try {
       await axiosInstance.put(`/notas/atualizar/${StudentId}/${disciplinaId}`, {
-        aluno: students.find((student) => student.id === StudentId)?.nome,
+        aluno: students.find((student) => student.id === StudentId)?.name,
         disciplina: grades.find((grade) => grade.id === disciplinaId)
           ?.disciplina,
         valorNota: Number(value),
