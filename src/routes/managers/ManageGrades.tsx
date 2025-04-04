@@ -4,7 +4,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { AxiosResponse } from 'axios';
 import axiosInstance from '../../helper/axios-instance';
 
-import { Student } from '../../types/StudentType';
+import { StudentType } from '../../types/entities/StudentType';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
@@ -13,7 +13,7 @@ import GradesCard from '../../components/card/GradesCard';
 import Button from '../../components/buttons/Button';
 
 const ManageGrades = () => {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<StudentType[]>([]);
   const [grades, setGrades] = useState<
     {
       id: number;
@@ -37,7 +37,7 @@ const ManageGrades = () => {
     const fetchData = async () => {
       try {
         const [studentsResponse, gradesResponse]: [
-          AxiosResponse<Student[]>,
+          AxiosResponse<StudentType[]>,
           AxiosResponse<any[]>
         ] = await Promise.all([
           axiosInstance.get('/alunos/listar'),
@@ -114,12 +114,14 @@ const ManageGrades = () => {
     <Main>
       <MainTitle title="Gestão de Notas" />
       <CardsContainer>
-        {students.map(({ id, nome, percentualFrequencia }) => (
+        {students.map(({ id, name, frequency }) => (
           <GradesCard
             key={id}
             id={id}
-            nome={nome}
-            percentualFrequencia={percentualFrequencia}
+            student={{
+              name,
+              frequency,
+            }}
             handleGrades={handleGrades}
             handleGradeAverage={handleGradeAverage}
           />

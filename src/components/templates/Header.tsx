@@ -32,7 +32,7 @@ const Header = () => {
               Dashboard
             </Link>
           </li>
-          {/* <li className="py-2">
+          {/* <li className="py-2"> // Todo: Colocar quando a autenticacao estiver pronta
             <Link
               to="/login"
               className="hover:text-blue-600 fond-bold md:text-lg text-white"

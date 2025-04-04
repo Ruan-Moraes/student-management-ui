@@ -1,9 +1,11 @@
+import { StudentType } from '../../types/entities/StudentType';
+
 type DisciplineInfoProps = {
   id: number;
-  name: string;
+  student: Partial<StudentType>;
 };
 
-const DisciplineInfo = ({ id, name }: DisciplineInfoProps) => {
+const DisciplineInfo = ({ id, student: { name } }: DisciplineInfoProps) => {
   return (
     <div className="flex flex-col">
       <h2 className="font-bold">{name}</h2>

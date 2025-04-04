@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 
 import axiosInstance from '../../helper/axios-instance';
 
-import { StudentAverageResponse } from '../../types/StudentAverageResponseType';
-import { AverageResponse } from '../../types/AverageResponseType';
+import { StudentAverageResponseType } from '../../types/responses/StudentAverageResponseType';
+import { AverageResponseType } from '../../types/responses/AverageResponseType';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 
 const AboveAverage = () => {
   const [aboveAverageStudents, setAboveAverageStudents] = useState<
-    StudentAverageResponse[]
+    StudentAverageResponseType[]
   >([]);
 
   const [average, setAverage] = useState<number | null>(null);
@@ -18,17 +18,17 @@ const AboveAverage = () => {
   useEffect(() => {
     const fetchDate = async () => {
       try {
-        const [aboveAverageStudentsResponse, averageResponse] =
+        const [aboveAverageStudentsResponse, AverageResponseType] =
           await Promise.all([
-            axiosInstance.get<StudentAverageResponse[]>(
+            axiosInstance.get<StudentAverageResponseType[]>(
               '/grades/findAboveAverageStudents'
             ),
-            axiosInstance.get<AverageResponse>(
+            axiosInstance.get<AverageResponseType>(
               '/grades/calculateAverageAllGrades'
             ),
           ]);
 
-        setAverage(averageResponse.data.average);
+        setAverage(AverageResponseType.data.average);
         setAboveAverageStudents(aboveAverageStudentsResponse.data);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);

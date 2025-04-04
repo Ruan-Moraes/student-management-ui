@@ -1,20 +1,20 @@
+import { StudentType } from '../../types/entities/StudentType';
+
 import GradesInfo from '../informations/GradesInfo';
 import ButtonsContainer from '../containers/ButtonsContainer';
 import Button from '../buttons/Button';
 
 type GradesCardProps = {
   id: number;
-  nome: string;
-  percentualFrequencia: number;
+  student: Partial<StudentType>;
 
-  handleGrades: (id: number, nome: string) => void;
-  handleGradeAverage: (id: number, nome: string) => void;
+  handleGrades: (id: number, name: string) => void;
+  handleGradeAverage: (id: number, name: string) => void;
 };
 
 const GradesCard = ({
   id,
-  nome,
-  percentualFrequencia,
+  student: { name, frequency },
   handleGrades,
   handleGradeAverage,
 }: GradesCardProps) => {
@@ -25,18 +25,20 @@ const GradesCard = ({
     >
       <GradesInfo
         id={id}
-        nome={nome}
-        percentualFrequencia={percentualFrequencia}
+        student={{
+          name,
+          frequency,
+        }}
       />
       <ButtonsContainer className="flex flex-col gap-2">
         <Button
           className="bg-blue-500 hover:bg-blue-700"
-          handleClick={() => handleGrades(id, nome)}
+          handleClick={() => handleGrades(id, name!)}
           label="Editar Notas"
         />
         <Button
           className="bg-blue-500 hover:bg-blue-700"
-          handleClick={() => handleGradeAverage(id, nome)}
+          handleClick={() => handleGradeAverage(id, name!)}
           label="Média Geral"
         />
       </ButtonsContainer>

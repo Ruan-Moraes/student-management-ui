@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import axios, { AxiosResponse } from 'axios';
 import axiosInstance from '../../helper/axios-instance';
 
-import { Discipline } from '../../types/DisciplineType';
-import { Student } from '../../types/StudentType';
+import { StudentType } from '../../types/entities/StudentType';
+import { DisciplineType } from '../../types/entities/DisciplineType';
 
 import Main from '../../components/templates/Main';
 
@@ -16,12 +16,14 @@ import StudentCard from '../../components/card/StudentCard';
 import Button from '../../components/buttons/Button';
 
 const ManageStudents = () => {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
+  const [students, setStudents] = useState<StudentType[]>([]);
+  const [disciplines, setDisciplines] = useState<DisciplineType[]>([]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [selectedStudent, setSelectedStudent] = useState<StudentType | null>(
+    null
+  );
 
   const openModal = (id: number) => {
     const student = students.find((student) => student.id === id) || null;
@@ -34,8 +36,8 @@ const ManageStudents = () => {
     const fetchData = async () => {
       try {
         const [studentsResponse, disciplinesResponse]: [
-          AxiosResponse<Student[]>,
-          AxiosResponse<Discipline[]>
+          AxiosResponse<StudentType[]>,
+          AxiosResponse<DisciplineType[]>
         ] = await Promise.all([
           axiosInstance.get('/students'),
           axiosInstance.get('/disciplines'),
@@ -197,8 +199,10 @@ const ManageStudents = () => {
           <StudentCard
             key={id}
             id={id}
-            name={name}
-            frequency={frequency}
+            student={{
+              name,
+              frequency,
+            }}
             openModal={openModal}
             handleFrequency={handleFrequency}
             handleName={handleName}

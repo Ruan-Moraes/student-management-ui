@@ -1,4 +1,4 @@
-type AverageResponseType = {
+export type AverageResponseType = {
   average: number;
   links: [
     {
@@ -9,5 +9,3 @@ type AverageResponseType = {
     }
   ];
 };
-
-export type { AverageResponseType as AverageResponse };

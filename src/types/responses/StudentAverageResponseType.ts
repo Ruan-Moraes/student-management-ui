@@ -1,4 +1,4 @@
-type StudentAverageResponseType = {
+export type StudentAverageResponseType = {
   name: string;
   average: number;
   links: [
@@ -10,5 +10,3 @@ type StudentAverageResponseType = {
     }
   ];
 };
-
-export type { StudentAverageResponseType as StudentAverageResponse };

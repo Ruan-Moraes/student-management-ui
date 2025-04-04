@@ -1,10 +1,14 @@
+import { StudentType } from '../../types/entities/StudentType';
+
 type StudentInfoProps = {
   id: number;
-  name: string;
-  frequency: number;
+  student: Partial<StudentType>;
 };
 
-const StudentInfo = ({ id, name, frequency }: StudentInfoProps) => {
+const StudentInfo = ({
+  id,
+  student: { name, frequency },
+}: StudentInfoProps) => {
   return (
     <div className="flex flex-col gap-2 justify-between h-full">
       <div className="mt-8">

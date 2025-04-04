@@ -1,11 +1,11 @@
 import ButtonsContainer from '../containers/ButtonsContainer';
 import Button from '../../components/buttons/Button';
 import StudentInfo from '../informations/StudentInfo';
+import { StudentType } from '../../types/entities/StudentType';
 
 type StudentCardProps = {
   id: number;
-  name: string;
-  frequency: number;
+  student: Partial<StudentType>;
 
   openModal: (id: number) => void;
   handleFrequency: (id: number) => void;
@@ -15,8 +15,7 @@ type StudentCardProps = {
 
 const StudentCard = ({
   id,
-  name,
-  frequency,
+  student: { name, frequency },
   openModal,
   handleFrequency,
   handleName,
@@ -24,7 +23,13 @@ const StudentCard = ({
 }: StudentCardProps) => {
   return (
     <div className="flex items-center justify-between bg-white shadow-sm p-4 rounded-lg border border-gray-200">
-      <StudentInfo id={id} name={name} frequency={frequency} />
+      <StudentInfo
+        id={id}
+        student={{
+          name,
+          frequency,
+        }}
+      />
       <ButtonsContainer className="flex flex-col gap-2">
         <Button
           className="bg-green-400 hover:bg-green-500"

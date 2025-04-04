@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import axiosInstance from '../../helper/axios-instance';
 
-import { Discipline } from '../../types/DisciplineType';
+import { DisciplineType } from '../../types/entities/DisciplineType';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
@@ -11,12 +11,12 @@ import CardsContainer from '../../components/containers/CardsContainer';
 import DisciplineCard from '../../components/card/DisciplineCard';
 
 const ManageStudents = () => {
-  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
+  const [disciplines, setDisciplines] = useState<DisciplineType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const disciplinesResponse: AxiosResponse<Discipline[]> =
+        const disciplinesResponse: AxiosResponse<DisciplineType[]> =
           await axiosInstance.get('/disciplines');
 
         setDisciplines(disciplinesResponse.data);
@@ -108,7 +108,9 @@ const ManageStudents = () => {
           <DisciplineCard
             key={id}
             id={id}
-            name={name}
+            student={{
+              name,
+            }}
             handleName={handleName}
             handleDelete={handleDelete}
           />
