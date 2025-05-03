@@ -32,6 +32,7 @@ const Routes = () => {
     { path: '/notas/media-turma-disciplina', element: <AvarageDisciplines /> },
     { path: '/frequencias', element: <Frequency /> },
   ];
+
   const routing = useRoutes(routes);
 
   return <>{routing}</>;

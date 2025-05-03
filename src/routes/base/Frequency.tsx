@@ -1,19 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 
+import { AxiosResponse } from 'axios';
+
 import axiosInstance from '../../helper/axios-instance';
 
 import Main from '../../components/templates/Main';
 import MainTitle from '../../components/titles/MainTitle';
 
-interface Frequency {
-  id: number;
-  nome: string;
-  percentualFrequencia: number;
-}
+import { StudentType } from '../../types/entities/StudentType';
 
 const Frequency = () => {
-  const [frequencies, setFrequencies] = useState<Frequency[]>([]);
-  const [cutoffValue, setCutoffValue] = useState(75);
+  const [students, setStudents] = useState<StudentType[]>([]);
+  const [cutoffValue, setCutoffValue] = useState<number>(75);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -21,15 +19,15 @@ const Frequency = () => {
     e.preventDefault();
 
     try {
-      const response = await axiosInstance.get(
-        `/alunos/buscar/frequencia/${cutoffValue}`
+      const response: AxiosResponse<StudentType[]> = await axiosInstance.get(
+        `/students/lowFrequency?frequency_below=${cutoffValue}`
       );
 
-      setFrequencies(response.data);
+      setStudents(response.data);
     } catch (error) {
-      alert('Erro ao buscar frequências');
-
       console.error('Erro ao buscar frequências:', error);
+
+      alert('Erro ao buscar frequências');
     }
   };
 
@@ -41,7 +39,7 @@ const Frequency = () => {
     <Main>
       <MainTitle
         title={`Alunos
-            com a frequência abaixo de ${cutoffValue}
+            com a frequência abaixo de ${cutoffValue}%
         `}
       />
       <div>
@@ -62,8 +60,8 @@ const Frequency = () => {
         </form>
       </div>
       <div className="flex flex-col gap-2">
-        {frequencies.length > 0 &&
-          frequencies.map(({ id, nome, percentualFrequencia }) => (
+        {students.length > 0 &&
+          students.map(({ id, name, frequency }) => (
             <div
               key={id}
               className="flex items-center justify-between bg-white shadow-sm p-4 rounded-lg border border-gray-200"
@@ -72,9 +70,9 @@ const Frequency = () => {
                 <p className="text-xs text-gray-500">ID: {id}</p>
 
                 <div className="mt-2">
-                  <p className="font-semibold text-lg text-gray-800">{nome}</p>
+                  <p className="font-semibold text-lg text-gray-800">{name}</p>
                   <p className="text-sm text-gray-500">
-                    Frequência: {percentualFrequencia}%
+                    Frequência: {frequency}%
                   </p>
                 </div>
               </div>
